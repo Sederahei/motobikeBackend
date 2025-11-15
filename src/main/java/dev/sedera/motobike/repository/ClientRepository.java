@@ -1,7 +1,7 @@
-package repository;
+package dev.sedera.motobike.repository;
 
 
-import entity.Client;
+import dev.sedera.motobike.entity.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClientRepository extends JpaRepository<Client, Long> {

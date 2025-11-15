@@ -1,7 +1,7 @@
-package repository;
+package dev.sedera.motobike.repository;
 
 
-import entity.Commande;
+import dev.sedera.motobike.entity.Commande;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

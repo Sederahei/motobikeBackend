@@ -1,4 +1,4 @@
-package entity;
+package dev.sedera.motobike.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

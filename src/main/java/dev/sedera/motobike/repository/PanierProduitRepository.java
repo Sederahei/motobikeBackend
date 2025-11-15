@@ -1,7 +1,7 @@
-package repository;
+package dev.sedera.motobike.repository;
 
 
-import entity.PanierProduit;
+import dev.sedera.motobike.entity.PanierProduit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PanierProduitRepository extends JpaRepository<PanierProduit, Long> {

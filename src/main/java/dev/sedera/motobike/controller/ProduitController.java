@@ -1,0 +1,64 @@
+package dev.sedera.motobike.controller;
+
+import dev.sedera.motobike.entity.Produit;
+import dev.sedera.motobike.service.ProduitService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/produits")
+public class ProduitController {
+
+    private final ProduitService produitService;
+
+    public ProduitController(ProduitService produitService) {
+        this.produitService = produitService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Produit>> getAllProduits() {
+        return ResponseEntity.ok(produitService.getAllProduits());
+    }
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Produit> getProduitById(@PathVariable Long id) {
+        Produit p = produitService.getProduitById(id);
+        return ResponseEntity.ok(p);
+    }
+
+    @PostMapping
+    public ResponseEntity<Produit> createProduit(@RequestBody Produit produit) {
+        Produit saved = produitService.saveProduit(produit);
+        return ResponseEntity.created(URI.create("/api/produits/" + saved.getId())).body(saved);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Produit> updateProduit(@PathVariable Long id, @RequestBody Produit produit) {
+        Produit existing = produitService.getProduitById(id);
+        existing.setNom(produit.getNom());
+        existing.setType(produit.getType());
+        existing.setMarque(produit.getMarque());
+        existing.setPrix(produit.getPrix());
+        existing.setStock(produit.getStock());
+        existing.setDescription(produit.getDescription());
+        existing.setImageUrl(produit.getImageUrl());
+        return ResponseEntity.ok(produitService.saveProduit(existing));
+    }
+
+    @PatchMapping("/{id}/stock")
+    public ResponseEntity<Produit> updateStock(@PathVariable Long id, @RequestParam Integer stock) {
+        Produit existing = produitService.getProduitById(id);
+        existing.setStock(stock);
+        return ResponseEntity.ok(produitService.saveProduit(existing));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduit(@PathVariable Long id) {
+        produitService.deleteProduit(id);
+        return ResponseEntity.noContent().build();
+    }
+}
