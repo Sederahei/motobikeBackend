@@ -23,6 +23,18 @@ public class ClientService {
         return clientRepository.findById(id).orElseThrow();
     }
 
+    public Client getClientByEmail(String email) {
+        return clientRepository.findByEmail(email);
+    }
+
+    public List<Client> getClientsByNom(String nom) {
+        return clientRepository.findByNomIgnoreCase(nom);
+    }
+
+    public List<Client> getClientsByTelephone(String telephone) {
+        return clientRepository.findByTelephone(telephone);
+    }
+
     public Client saveClient(Client client) {
         return clientRepository.save(client);
     }
