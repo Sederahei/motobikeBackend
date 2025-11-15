@@ -1,9 +1,10 @@
 package entity;
 import jakarta.persistence.*;
 import lombok.*;
+@Getter
+@Setter
 @Entity
 @Table(name = "produit")
-@Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 public class Produit {
     @Id
