@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -27,25 +28,47 @@ public class ClientController {
     public ResponseEntity<Client> getClientById(@PathVariable Long id) {
         return ResponseEntity.ok(clientService.getClientById(id));
     }
-
     @GetMapping("/search/by-email")
     public ResponseEntity<Client> getClientByEmail(@RequestParam String email) {
-        return ResponseEntity.ok(clientService.getClientByEmail(email));
-    }
+           return ResponseEntity.ok(clientService.getClientByEmail(email));
+        }
 
-    @GetMapping("/search/by-nom")
-    public ResponseEntity<List<Client>> getClientsByNom(@RequestParam String nom) {
+@GetMapping("/search/by-nom")
+  public ResponseEntity<List<Client>> getClientsByNom(@RequestParam String nom) {
         return ResponseEntity.ok(clientService.getClientsByNom(nom));
-    }
+}
+
+
+
     @GetMapping("/nom/{nom}")
     public ResponseEntity<List<Client>> getClientsByNomPath(@PathVariable String nom) {
         return ResponseEntity.ok(clientService.getClientsByNom(nom));
     }
+    @GetMapping("/mail/{mail}")
+    public ResponseEntity<List<Client>> getClientsByMailPath(@PathVariable String mail){
+        return ResponseEntity.ok(Collections.singletonList(clientService.getClientByEmail(mail)));
+    }
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Client> getClientByEmailPath(@PathVariable String email) {
+        return ResponseEntity.ok(clientService.getClientByEmail(email));
+    }
 
-    @GetMapping("/search/by-telephone")
-    public ResponseEntity<List<Client>> getClientsByTelephone(@RequestParam String telephone) {
+    @GetMapping("/email/search/{email}")
+    public ResponseEntity<List<Client>> getClientsByEmailPath(@PathVariable String email) {
+        return ResponseEntity.ok(clientService.getClientsByMail(email));
+    }
+
+    @GetMapping("/telephone/{telephone}")
+    public ResponseEntity<List<Client>> getClientsByTelephonePath(@PathVariable String telephone) {
         return ResponseEntity.ok(clientService.getClientsByTelephone(telephone));
     }
+
+
+    @GetMapping("/search/by-telephone")
+       public ResponseEntity<List<Client>> getClientsByTelephone(@RequestParam String telephone) {
+            return ResponseEntity.ok(clientService.getClientsByTelephone(telephone));
+        }
+
 
     @PostMapping
     public ResponseEntity<Client> createClient(@RequestBody Client client) {
