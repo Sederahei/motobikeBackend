@@ -37,6 +37,10 @@ public class ClientController {
     public ResponseEntity<List<Client>> getClientsByNom(@RequestParam String nom) {
         return ResponseEntity.ok(clientService.getClientsByNom(nom));
     }
+    @GetMapping("/nom/{nom}")
+    public ResponseEntity<List<Client>> getClientsByNomPath(@PathVariable String nom) {
+        return ResponseEntity.ok(clientService.getClientsByNom(nom));
+    }
 
     @GetMapping("/search/by-telephone")
     public ResponseEntity<List<Client>> getClientsByTelephone(@RequestParam String telephone) {

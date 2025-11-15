@@ -23,13 +23,19 @@ public class ClientService {
         return clientRepository.findById(id).orElseThrow();
     }
 
+
+
     public Client getClientByEmail(String email) {
         return clientRepository.findByEmail(email);
     }
 
+    //public List<Client> getClientsByNom(String nom) {
+    //        return clientRepository.findByNomIgnoreCase(nom);
+    //    }
     public List<Client> getClientsByNom(String nom) {
-        return clientRepository.findByNomIgnoreCase(nom);
+        return clientRepository.findByNomContainingIgnoreCase(nom);
     }
+
 
     public List<Client> getClientsByTelephone(String telephone) {
         return clientRepository.findByTelephone(telephone);

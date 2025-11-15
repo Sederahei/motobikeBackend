@@ -11,6 +11,7 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
     // Recherche par nom (plusieurs clients peuvent avoir le même nom)
     List<Client> findByNomIgnoreCase(String nom);
+    List<Client> findByNomContainingIgnoreCase(String nom);
 
     // Recherche par téléphone
     List<Client> findByTelephone(String telephone);
