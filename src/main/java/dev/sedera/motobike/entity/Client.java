@@ -1,6 +1,5 @@
 package dev.sedera.motobike.entity;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,4 +22,3 @@ public class Client {
     @Column(columnDefinition = "TEXT")
     private String adresse;
 }
-

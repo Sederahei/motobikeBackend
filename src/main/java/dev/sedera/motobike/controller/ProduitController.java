@@ -50,15 +50,15 @@ public class ProduitController {
     }
 
     @PatchMapping("/{id}/stock")
-    public ResponseEntity<Produit> updateStock(@PathVariable Long id, @RequestParam Integer stock) {
+    public ResponseEntity<String> updateStock(@PathVariable Long id, @RequestParam Integer stock) {
         Produit existing = produitService.getProduitById(id);
         existing.setStock(stock);
-        return ResponseEntity.ok(produitService.saveProduit(existing));
+        return ResponseEntity.ok(produitService.saveProduit(existing) + "stock a jour ");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduit(@PathVariable Long id) {
+    public ResponseEntity<String> deleteProduit(@PathVariable Long id) {
         produitService.deleteProduit(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build().ok("votre produit a ete supprimer");
     }
 }
