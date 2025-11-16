@@ -1,12 +1,7 @@
 package dev.sedera.motobike.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Table;
-
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -18,13 +13,10 @@ public class Panier {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    private LocalDateTime dateCreation = LocalDateTime.now();
-
-    @OneToMany(mappedBy = "panier", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "panier", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PanierProduit> produits;
 }
-
