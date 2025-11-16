@@ -3,11 +3,12 @@ package dev.sedera.motobike.controller;
 import dev.sedera.motobike.entity.PanierProduit;
 import dev.sedera.motobike.service.PanierProduitService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-
+@Service
 @RestController
 @RequestMapping("/api/panier-produits")
 public class PanierProduitController {
@@ -25,8 +26,11 @@ public class PanierProduitController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PanierProduit> getPanierProduitById(@PathVariable Long id) {
-        return ResponseEntity.ok(panierProduitService.getPanierProduitById(id));
+        return panierProduitService.getPanierProduitById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
+
 
     @GetMapping("/search/by-nom")
     public ResponseEntity<List<PanierProduit>> getPanierProduitsByNom(@RequestParam String nom) {
