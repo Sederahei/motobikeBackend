@@ -5,6 +5,7 @@ import dev.sedera.motobike.repository.PanierProduitRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PanierProduitService {
@@ -19,8 +20,8 @@ public class PanierProduitService {
         return panierProduitRepository.findAll();
     }
 
-    public PanierProduit getPanierProduitById(Long id) {
-        return panierProduitRepository.findById(id).orElseThrow();
+    public Optional<PanierProduit> getPanierProduitById(Long id) {
+        return panierProduitRepository.findById(id);
     }
 
     public List<PanierProduit> getPanierProduitsByNom(String nom) {
@@ -36,8 +37,20 @@ public class PanierProduitService {
     }
 
     public PanierProduit savePanierProduit(PanierProduit panierProduit) {
+        // Vérifier si ce produit existe déjà dans ce panier
+        List<PanierProduit> existants = panierProduitRepository
+                .findByPanierClientId(panierProduit.getPanier().getClient().getId());
+
+        for (PanierProduit pp : existants) {
+            if (pp.getProduit().getId().equals(panierProduit.getProduit().getId())) {
+                pp.setQuantite(pp.getQuantite() + panierProduit.getQuantite());
+                return panierProduitRepository.save(pp);
+            }
+        }
+
         return panierProduitRepository.save(panierProduit);
     }
+
 
     public void deletePanierProduit(Long id) {
         panierProduitRepository.deleteById(id);
