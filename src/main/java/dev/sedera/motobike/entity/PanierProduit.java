@@ -1,10 +1,8 @@
 package dev.sedera.motobike.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
 
 @Entity
 @Table(name = "panier_produit")
@@ -16,9 +14,7 @@ public class PanierProduit {
     private Long id;
 
     @ManyToOne
-
-    @JsonIgnore
-
+    @JsonIgnore   // ✅ évite boucle infinie Panier ↔ PanierProduit
     @JoinColumn(name = "panier_id", nullable = false)
     private Panier panier;
 
@@ -28,4 +24,3 @@ public class PanierProduit {
 
     private Integer quantite;
 }
-

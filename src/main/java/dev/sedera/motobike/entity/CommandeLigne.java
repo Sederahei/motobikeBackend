@@ -1,5 +1,6 @@
 package dev.sedera.motobike.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +14,7 @@ public class CommandeLigne {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore   // ✅ évite boucle infinie Commande ↔ CommandeLigne
     @JoinColumn(name = "commande_id", nullable = false)
     private Commande commande;
 
@@ -20,10 +22,7 @@ public class CommandeLigne {
     @JoinColumn(name = "produit_id", nullable = false)
     private Produit produit;
 
-    private Double prixUnitaire;
-
     private Integer quantite;
-
+    private Double prixUnitaire;
     private Double sousTotal;
 }
-

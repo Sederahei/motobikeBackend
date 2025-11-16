@@ -18,13 +18,10 @@ public class Commande {
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    private LocalDateTime dateCommande = LocalDateTime.now();
-
-    private String statut = "en_attente";
-
+    private LocalDateTime dateCommande;
+    private String statut;
     private Double total;
 
-    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommandeLigne> lignes;
 }
-
