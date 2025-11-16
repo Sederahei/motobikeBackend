@@ -2,6 +2,8 @@ package dev.sedera.motobike.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +18,7 @@ public class Panier {
     @OneToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
-
     @OneToMany(mappedBy = "panier", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PanierProduit> produits;
+    private List<PanierProduit> produits = new ArrayList<>();
+
 }
