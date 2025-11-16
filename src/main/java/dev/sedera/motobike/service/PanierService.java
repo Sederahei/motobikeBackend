@@ -1,7 +1,10 @@
 package dev.sedera.motobike.service;
 
+import dev.sedera.motobike.entity.Client;
 import dev.sedera.motobike.entity.Panier;
+import dev.sedera.motobike.repository.ClientRepository;
 import dev.sedera.motobike.repository.PanierRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +20,15 @@ public class PanierService {
         return panierRepository.findByClientId(clientId);
     }
 
+    @Autowired
+    private ClientRepository clientRepository;
+
     public Panier savePanier(Panier panier) {
+        // Charger le client complet depuis la base
+        Client client = clientRepository.findById(panier.getClient().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Client introuvable"));
+
+        panier.setClient(client);
         return panierRepository.save(panier);
     }
 
