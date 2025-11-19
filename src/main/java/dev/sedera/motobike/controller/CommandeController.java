@@ -30,4 +30,8 @@ public class CommandeController {
     public ResponseEntity<List<Commande>> getCommandesByClient(@PathVariable Long clientId) {
         return ResponseEntity.ok(commandeService.getCommandesByClient(clientId));
     }
+    @GetMapping
+    public ResponseEntity<List<Commande>> getAllCommandes() {
+        return ResponseEntity.ok(commandeService.getAllCommandes());
+    }
 }

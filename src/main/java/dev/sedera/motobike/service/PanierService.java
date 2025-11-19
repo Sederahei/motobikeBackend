@@ -33,6 +33,7 @@ public class PanierService {
     }
 
     public void deletePanier(Long id) {
+
         panierRepository.deleteById(id);
     }
 }

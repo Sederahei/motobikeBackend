@@ -21,6 +21,7 @@ public class CommandeService {
         this.panierRepository = panierRepository;
     }
 
+
     public Commande validerCommande(Long clientId) {
         Panier panier = panierRepository.findByClientId(clientId);
         if (panier == null || panier.getProduits().isEmpty()) {
@@ -48,15 +49,24 @@ public class CommandeService {
                 .mapToDouble(CommandeLigne::getSousTotal)
                 .sum();
         commande.setTotal(total);
+        Commande savedCommande = commandeRepository.save(commande);
 
-        return commandeRepository.save(commande);
+
+        panier.getProduits().clear();
+        panierRepository.save(panier);
+
+        return savedCommande;
     }
 
     public Commande getCommandeById(Long id) {
+
         return commandeRepository.findById(id).orElseThrow();
     }
-
+    public List <Commande> getAllCommandes(){
+        return commandeRepository.findAll();
+    }
     public List<Commande> getCommandesByClient(Long clientId) {
+
         return commandeRepository.findByClientId(clientId);
     }
 }

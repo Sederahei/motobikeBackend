@@ -17,18 +17,22 @@ public class PanierProduitService {
     }
 
     public List<PanierProduit> getAllPanierProduits() {
+
         return panierProduitRepository.findAll();
     }
 
     public Optional<PanierProduit> getPanierProduitById(Long id) {
+
         return panierProduitRepository.findById(id);
     }
 
     public List<PanierProduit> getPanierProduitsByNom(String nom) {
+
         return panierProduitRepository.findByProduitNomContainingIgnoreCase(nom);
     }
 
     public List<PanierProduit> getPanierProduitsByType(String type) {
+
         return panierProduitRepository.findByProduitTypeContainingIgnoreCase(type);
     }
 
@@ -53,6 +57,7 @@ public class PanierProduitService {
 
 
     public void deletePanierProduit(Long id) {
+
         panierProduitRepository.deleteById(id);
     }
 }

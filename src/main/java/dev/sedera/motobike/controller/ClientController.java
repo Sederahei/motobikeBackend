@@ -83,6 +83,7 @@ public class ClientController {
         existing.setEmail(client.getEmail());
         existing.setTelephone(client.getTelephone());
         existing.setAdresse(client.getAdresse());
+
         return ResponseEntity.ok(clientService.saveClient(existing));
     }
 

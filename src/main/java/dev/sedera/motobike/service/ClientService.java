@@ -16,14 +16,18 @@ public class ClientService {
     }
 
     public List<Client> getAllClients() {
+
+
         return clientRepository.findAll();
     }
 
     public Client getClientById(Long id) {
+
         return clientRepository.findById(id).orElseThrow();
     }
 
     public Client getClientByEmail(String email) {
+
         return clientRepository.findByEmail(email);
     }
 
