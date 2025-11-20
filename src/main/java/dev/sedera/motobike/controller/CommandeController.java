@@ -18,20 +18,38 @@ public class CommandeController {
 
     @PostMapping("/valider/{clientId}")
     public ResponseEntity<Commande> validerCommande(@PathVariable Long clientId) {
+
         return ResponseEntity.ok(commandeService.validerCommande(clientId));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Commande> getCommandeById(@PathVariable Long id) {
+
         return ResponseEntity.ok(commandeService.getCommandeById(id));
     }
 
     @GetMapping("/client/{clientId}")
     public ResponseEntity<List<Commande>> getCommandesByClient(@PathVariable Long clientId) {
+
         return ResponseEntity.ok(commandeService.getCommandesByClient(clientId));
     }
     @GetMapping
     public ResponseEntity<List<Commande>> getAllCommandes() {
+
         return ResponseEntity.ok(commandeService.getAllCommandes());
     }
+    @PutMapping("/{id}/statut")
+    public ResponseEntity<Commande> updateStatut(@PathVariable Long id, @RequestParam String statut) {
+
+        return ResponseEntity.ok(commandeService.updateStatut(id, statut));
+    }
+
+
+    @GetMapping("/statut/{statut}")
+    public ResponseEntity<List<Commande>> getCommandesByStatut(@PathVariable String statut) {
+
+        return ResponseEntity.ok(commandeService.getCommandesByStatut(statut));
+    }
+
+
 }

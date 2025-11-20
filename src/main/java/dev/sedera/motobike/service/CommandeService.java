@@ -69,4 +69,18 @@ public class CommandeService {
 
         return commandeRepository.findByClientId(clientId);
     }
+
+    public Commande updateStatut(Long commandeId, String statut) {
+        Commande commande = commandeRepository.findById(commandeId)
+                .orElseThrow(() -> new IllegalArgumentException("Commande introuvable"));
+        commande.setStatut(statut);
+        return commandeRepository.save(commande);
+    }
+
+    public List<Commande> getCommandesByStatut(String statut) {
+
+        return commandeRepository.findByStatut(statut);
+
+    }
+
 }
