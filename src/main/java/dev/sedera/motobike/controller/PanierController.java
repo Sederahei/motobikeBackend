@@ -1,9 +1,12 @@
 package dev.sedera.motobike.controller;
 
 import dev.sedera.motobike.entity.Panier;
+import dev.sedera.motobike.entity.Produit;
 import dev.sedera.motobike.service.PanierService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/paniers")
@@ -19,6 +22,15 @@ public class PanierController {
     @PostMapping
     public ResponseEntity<Panier> createPanier(@RequestBody Panier panier) {
         return ResponseEntity.ok(panierService.savePanier(panier));
+    }
+    @GetMapping
+    public final ResponseEntity<List<Panier>> getAllPaniers() {
+        try {
+            List<Panier> paniers = panierService.getAllPaniers();
+            return ResponseEntity.ok(paniers);
+        }catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     // ✅ Récupérer un panier par clientId

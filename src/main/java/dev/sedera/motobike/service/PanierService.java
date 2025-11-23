@@ -7,6 +7,8 @@ import dev.sedera.motobike.repository.PanierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PanierService {
 
@@ -17,14 +19,26 @@ public class PanierService {
     }
 
     public Panier getPanierByClientId(Long clientId) {
-        return panierRepository.findByClientId(clientId);
+        try {
+            return panierRepository.findByClientId(clientId);
+        }catch (Exception e){
+            throw new RuntimeException(" erreur de recuperation de cle");
+        }
+
     }
+    public  List<Panier> getAllPaniers() {
+        try {
+            return panierRepository.findAll();
+        }catch (Exception e) {
+            throw new RuntimeException("Erreur de recuperation des paniers");
+        }
+    }
+
 
     @Autowired
     private ClientRepository clientRepository;
 
     public Panier savePanier(Panier panier) {
-        // Charger le client complet depuis la base
         Client client = clientRepository.findById(panier.getClient().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Client introuvable"));
 
