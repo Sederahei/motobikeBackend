@@ -10,7 +10,6 @@ import java.util.List;
 public interface PanierRepository extends JpaRepository<Panier, Long> {
 
     Panier findByClientId(Long clientId);
-
     @Override
     List<Panier> findAll();
 }

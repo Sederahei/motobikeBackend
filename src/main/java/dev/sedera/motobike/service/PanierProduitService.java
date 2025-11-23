@@ -40,8 +40,8 @@ public class PanierProduitService {
         return panierProduitRepository.findByProduitMarqueContainingIgnoreCase(marque);
     }
 
-    public PanierProduit savePanierProduit(PanierProduit panierProduit) {
-        // Vérifier si ce produit existe déjà dans ce panier
+    public PanierProduit savePanierProduit(PanierProduit panierProduit) throws Exception {
+        try{
         List<PanierProduit> existants = panierProduitRepository
                 .findByPanierClientId(panierProduit.getPanier().getClient().getId());
 
@@ -53,6 +53,8 @@ public class PanierProduitService {
         }
 
         return panierProduitRepository.save(panierProduit);
+    }catch (Exception e){
+        }throw new Exception("ererue de calss ");
     }
 
 

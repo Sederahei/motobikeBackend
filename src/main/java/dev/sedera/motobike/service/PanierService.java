@@ -5,8 +5,10 @@ import dev.sedera.motobike.entity.Panier;
 import dev.sedera.motobike.repository.ClientRepository;
 import dev.sedera.motobike.repository.PanierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service

@@ -4,6 +4,7 @@ import dev.sedera.motobike.entity.PanierProduit;
 import dev.sedera.motobike.service.PanierProduitService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -20,8 +21,13 @@ public class PanierProduitController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PanierProduit>> getAllPanierProduits() {
+    public ResponseEntity<List<PanierProduit>> getAllPanierProduits() throws Exception {
+
+    try {
         return ResponseEntity.ok(panierProduitService.getAllPanierProduits());
+    }catch (Exception e ){
+        throw new Exception(" erreru de recuperation de produit");
+    }
     }
 
     @GetMapping("/{id}")
@@ -49,9 +55,14 @@ public class PanierProduitController {
 
     @PostMapping
     public ResponseEntity<PanierProduit> createPanierProduit(@RequestBody PanierProduit panierProduit) {
-        PanierProduit saved = panierProduitService.savePanierProduit(panierProduit);
-        return ResponseEntity.created(URI.create("/api/panier-produits/" + saved.getId())).body(saved);
+        try {
+            PanierProduit saved = panierProduitService.savePanierProduit(panierProduit);
+                 return ResponseEntity.created(URI.create("/api/panier-produits/" + saved.getId())).body(saved);
+    }catch (Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePanierProduit(@PathVariable Long id) {

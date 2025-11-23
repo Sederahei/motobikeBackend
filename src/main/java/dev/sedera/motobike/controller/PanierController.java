@@ -4,8 +4,10 @@ import dev.sedera.motobike.entity.Panier;
 import dev.sedera.motobike.entity.Produit;
 import dev.sedera.motobike.service.PanierService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.RuntimeErrorException;
 import java.util.List;
 
 @RestController
