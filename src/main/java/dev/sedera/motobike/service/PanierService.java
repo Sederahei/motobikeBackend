@@ -35,6 +35,11 @@ public class PanierService {
             throw new RuntimeException("Erreur de recuperation des paniers");
         }
     }
+    public Panier getPanierById(Long id) {
+        return panierRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Panier introuvable avec id " + id));
+    }
+
 
 
     @Autowired

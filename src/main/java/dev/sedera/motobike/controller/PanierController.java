@@ -2,7 +2,9 @@ package dev.sedera.motobike.controller;
 
 import dev.sedera.motobike.entity.Panier;
 import dev.sedera.motobike.entity.Produit;
+import dev.sedera.motobike.repository.PanierRepository;
 import dev.sedera.motobike.service.PanierService;
+import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +17,12 @@ import java.util.List;
 public class PanierController {
 
     private final PanierService panierService;
+    private final PanierRepository panierRepository;
 
-    public PanierController(PanierService panierService) {
+    public PanierController(PanierService panierService, PanierRepository panierRepository) {
         this.panierService = panierService;
+        this.panierRepository = panierRepository;
     }
-
-    // ✅ Créer un panier
     @PostMapping
     public ResponseEntity<Panier> createPanier(@RequestBody Panier panier) {
         return ResponseEntity.ok(panierService.savePanier(panier));
@@ -34,6 +36,14 @@ public class PanierController {
             return ResponseEntity.internalServerError().build();
         }
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Panier> getPanierById(@PathVariable Long id) {
+
+        return panierRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
     // ✅ Récupérer un panier par clientId
     @GetMapping("/client/{clientId}")
@@ -51,5 +61,6 @@ public class PanierController {
         panierService.deletePanier(id);
         return ResponseEntity.noContent().build();
     }
+
 }
 
