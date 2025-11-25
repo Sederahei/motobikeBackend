@@ -20,14 +20,21 @@ public class PanierService {
         this.panierRepository = panierRepository;
     }
 
-    public Panier getPanierByClientId(Long clientId) {
-        try {
-            return panierRepository.findByClientId(clientId);
-        }catch (Exception e){
-            throw new RuntimeException(" erreur de recuperation de cle");
-        }
+    @Autowired
+    private ClientRepository clientRepository;
 
+    public Panier getPanierByClientId(Long clientId) {
+        Panier panier = panierRepository.findByClientId(clientId);
+        if (panier == null) {
+            Client client = clientRepository.findById(clientId)
+                    .orElseThrow(() -> new RuntimeException("Client introuvable"));
+            panier = new Panier();
+            panier.setClient(client);
+            panier = panierRepository.save(panier);
+        }
+        return panier;
     }
+
     public  List<Panier> getAllPaniers() {
         try {
             return panierRepository.findAll();
@@ -42,8 +49,6 @@ public class PanierService {
 
 
 
-    @Autowired
-    private ClientRepository clientRepository;
 
     public Panier savePanier(Panier panier) {
         Client client = clientRepository.findById(panier.getClient().getId())

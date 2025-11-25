@@ -62,5 +62,8 @@ public class PanierProduitService {
 
         panierProduitRepository.deleteById(id);
     }
+    public List<PanierProduit> getPanierProduitsByClientId(Long clientId) {
+        return panierProduitRepository.findByPanierClientId(clientId);
+    }
 }
 

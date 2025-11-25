@@ -11,8 +11,6 @@ public interface PanierProduitRepository extends JpaRepository<PanierProduit, Lo
     List<PanierProduit> findByProduitNomContainingIgnoreCase(String nom);
     List<PanierProduit> findByProduitTypeContainingIgnoreCase(String type);
     List<PanierProduit> findByProduitMarqueContainingIgnoreCase(String marque);
-
-    // ✅ recherche par client via panier
     List<PanierProduit> findByPanierClientId(Long clientId);
 
 }
