@@ -1,20 +1,14 @@
 package dev.sedera.motobike.controller;
 
-import dev.sedera.motobike.entity.Client;
 import dev.sedera.motobike.entity.Panier;
 import dev.sedera.motobike.entity.PanierProduit;
 import dev.sedera.motobike.entity.Produit;
-import dev.sedera.motobike.repository.ClientRepository;
-import dev.sedera.motobike.repository.PanierRepository;
 import dev.sedera.motobike.repository.ProduitRepository;
 import dev.sedera.motobike.service.PanierProduitService;
 import dev.sedera.motobike.service.PanierService;
-import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponseException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.RuntimeErrorException;
 import java.util.List;
 import java.util.Map;
 
@@ -23,48 +17,35 @@ import java.util.Map;
 public class PanierController {
 
     private final PanierService panierService;
-    private final PanierRepository panierRepository;
-    private final ClientRepository clientRepository;
     private final ProduitRepository produitRepository;
     private final PanierProduitService panierProduitService;
 
-    public PanierController(PanierService panierService, PanierRepository panierRepository,PanierProduitService panierProduitService, ClientRepository clientRepository, ProduitRepository produitRepository) {
+    public PanierController(PanierService panierService,
+                            ProduitRepository produitRepository,
+                            PanierProduitService panierProduitService) {
         this.panierService = panierService;
-        this.panierRepository = panierRepository;
-        this.clientRepository = clientRepository;
         this.produitRepository = produitRepository;
         this.panierProduitService = panierProduitService;
     }
+
     @PostMapping
     public ResponseEntity<Panier> createPanier(@RequestBody Panier panier) {
         return ResponseEntity.ok(panierService.savePanier(panier));
     }
+
     @GetMapping
-    public final ResponseEntity<List<Panier>> getAllPaniers() {
-        try {
-            List<Panier> paniers = panierService.getAllPaniers();
-            return ResponseEntity.ok(paniers);
-        }catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+    public ResponseEntity<List<Panier>> getAllPaniers() {
+        return ResponseEntity.ok(panierService.getAllPaniers());
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Panier> getPanierById(@PathVariable Long id) {
-
-        return panierRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(panierService.getPanierById(id));
     }
-
-
 
     @GetMapping("/client/{clientId}")
     public ResponseEntity<Panier> getPanierByClientId(@PathVariable Long clientId) {
-        Panier panier = panierService.getPanierByClientId(clientId);
-        if (panier == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(panier);
+        return ResponseEntity.ok(panierService.getOrCreatePanier(clientId));
     }
 
     @DeleteMapping("/{id}")
@@ -72,6 +53,7 @@ public class PanierController {
         panierService.deletePanier(id);
         return ResponseEntity.noContent().build();
     }
+
     @PostMapping("/client/{clientId}/ajouter/{produitId}")
     public ResponseEntity<PanierProduit> ajouterProduitAuPanier(
             @PathVariable Long clientId,
@@ -80,17 +62,7 @@ public class PanierController {
 
         int quantite = (body != null) ? body.getOrDefault("quantite", 1) : 1;
 
-
-        Client client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("Client introuvable"));
-
-
-        Panier panier = panierService.getPanierByClientId(clientId);
-        if (panier == null) {
-            panier = new Panier();
-            panier.setClient(client);
-            panier = panierService.savePanier(panier);
-        }
+        Panier panier = panierService.getOrCreatePanier(clientId);
         Produit produit = produitRepository.findById(produitId)
                 .orElseThrow(() -> new RuntimeException("Produit introuvable"));
 
@@ -106,18 +78,14 @@ public class PanierController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+
     @GetMapping("/client/{clientId}/produits")
     public ResponseEntity<List<PanierProduit>> getProduitsDuPanier(@PathVariable Long clientId) {
-        try {
-            List<PanierProduit> produits = panierProduitService.getPanierProduitsByClientId(clientId);
-            if (produits == null || produits.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.ok(produits);
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+        List<PanierProduit> produits = panierProduitService.getPanierProduitsByClientId(clientId);
+        if (produits.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(produits);
     }
-
 }
-
