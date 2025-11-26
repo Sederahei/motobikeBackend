@@ -46,15 +46,21 @@ public class CommandeService {
 
     public Commande updateStatut(Long id, String statut) {
         Commande commande = getCommandeById(id);
-        commande.setStatut(statut);
-        if ("valide".equalsIgnoreCase(statut)) {
+
+        if ("valider".equalsIgnoreCase(statut)) {
             for (CommandeLigne ligne : commande.getLignes()) {
                 Produit produit = ligne.getProduit();
 
-                // ✅ décrémenter le stock réel
+
+                if (produit.getStock() < ligne.getQuantite()) {
+                    commande.setStatut("epuiser");
+                    return commandeRepository.save(commande);
+                }
+
+                // décrémenter le stock réel
                 produit.setStock(produit.getStock() - ligne.getQuantite());
 
-                // ✅ libérer la réservation (évite NullPointerException)
+                // libérer la réservation
                 int reserveActuel = (produit.getStockReserve() == null ? 0 : produit.getStockReserve());
                 produit.setStockReserve(reserveActuel - ligne.getQuantite());
 
@@ -62,9 +68,19 @@ public class CommandeService {
             }
         }
 
+        if ("annuler".equalsIgnoreCase(statut)) {
+            for (CommandeLigne ligne : commande.getLignes()) {
+                Produit produit = ligne.getProduit();
+                int reserveActuel = (produit.getStockReserve() == null ? 0 : produit.getStockReserve());
+                produit.setStockReserve(reserveActuel - ligne.getQuantite());
+                produitRepository.save(produit);
+            }
+        }
 
+        commande.setStatut(statut);
         return commandeRepository.save(commande);
     }
+
 
 
     // ✅ valider un panier en commande
