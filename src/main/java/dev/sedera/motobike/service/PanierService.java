@@ -50,4 +50,10 @@ public class PanierService {
     public void deletePanier(Long id) {
         panierRepository.deleteById(id);
     }
+    public void retirerProduit(Long clientId, Long produitId) {
+        Panier panier = getOrCreatePanier(clientId);
+        panier.getProduits().removeIf(pp -> pp.getProduit().getId().equals(produitId));
+        panierRepository.save(panier);
+    }
+
 }

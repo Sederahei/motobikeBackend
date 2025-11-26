@@ -88,4 +88,10 @@ public class PanierController {
         }
         return ResponseEntity.ok(produits);
     }
+    @DeleteMapping("/client/{clientId}/retirer/{produitId}")
+    public ResponseEntity<Void> retirerProduitDuPanier(@PathVariable Long clientId, @PathVariable Long produitId) {
+        panierService.retirerProduit(clientId, produitId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
