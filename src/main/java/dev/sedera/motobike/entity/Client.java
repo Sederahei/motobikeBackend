@@ -21,4 +21,7 @@ public class Client {
 
     @Column(columnDefinition = "TEXT")
     private String adresse;
+
+    @Column(nullable = false)
+    private String role;
 }

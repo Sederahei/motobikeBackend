@@ -17,7 +17,8 @@ public class Produit {
     private String type;
     private String marque;
     private Double prix;
-    private Integer stock;
+    private Integer stock= 0;
+    private Integer stockReserve = 0;
     @Column(columnDefinition = "TEXT")
     private String description;
     private String imageUrl;

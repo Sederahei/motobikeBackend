@@ -46,5 +46,9 @@ public class ProduitService {
     public List<Produit> getAllProduits() {
         return produitRepository.findAll();
     }
+
+    public List<Produit> getProduitsStockFaible(int seuil) {
+        return produitRepository.findByStockLessThan(seuil);
+    }
 }
 

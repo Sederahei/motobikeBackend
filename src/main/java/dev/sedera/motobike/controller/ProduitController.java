@@ -23,6 +23,11 @@ public class ProduitController {
         return ResponseEntity.ok(produitService.getAllProduits());
     }
 
+    @GetMapping("/stock/faible")
+    public ResponseEntity<List<Produit>> getProduitsStockFaible(@RequestParam(defaultValue = "5") int seuil) {
+        return ResponseEntity.ok(produitService.getProduitsStockFaible(seuil));
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Produit> getProduitById(@PathVariable Long id) {

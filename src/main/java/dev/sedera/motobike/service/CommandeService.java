@@ -1,11 +1,9 @@
 package dev.sedera.motobike.service;
 
-import dev.sedera.motobike.entity.Commande;
-import dev.sedera.motobike.entity.CommandeLigne;
-import dev.sedera.motobike.entity.Panier;
-import dev.sedera.motobike.entity.PanierProduit;
+import dev.sedera.motobike.entity.*;
 import dev.sedera.motobike.repository.CommandeRepository;
 import dev.sedera.motobike.repository.PanierRepository;
+import dev.sedera.motobike.repository.ProduitRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,10 +14,12 @@ public class CommandeService {
 
     private final CommandeRepository commandeRepository;
     private final PanierRepository panierRepository;
+    private final ProduitRepository produitRepository;
 
-    public CommandeService(CommandeRepository commandeRepository, PanierRepository panierRepository) {
+    public CommandeService(CommandeRepository commandeRepository, PanierRepository panierRepository, ProduitRepository produitRepository) {
         this.commandeRepository = commandeRepository;
         this.panierRepository = panierRepository;
+        this.produitRepository = produitRepository;
     }
 
     // ✅ récupérer une commande par ID
@@ -47,8 +47,25 @@ public class CommandeService {
     public Commande updateStatut(Long id, String statut) {
         Commande commande = getCommandeById(id);
         commande.setStatut(statut);
+        if ("valide".equalsIgnoreCase(statut)) {
+            for (CommandeLigne ligne : commande.getLignes()) {
+                Produit produit = ligne.getProduit();
+
+                // ✅ décrémenter le stock réel
+                produit.setStock(produit.getStock() - ligne.getQuantite());
+
+                // ✅ libérer la réservation (évite NullPointerException)
+                int reserveActuel = (produit.getStockReserve() == null ? 0 : produit.getStockReserve());
+                produit.setStockReserve(reserveActuel - ligne.getQuantite());
+
+                produitRepository.save(produit);
+            }
+        }
+
+
         return commandeRepository.save(commande);
     }
+
 
     // ✅ valider un panier en commande
     public Commande validerCommande(Long clientId) {
@@ -80,6 +97,13 @@ public class CommandeService {
 
             total += sousTotal;
             commande.getLignes().add(ligne);
+
+
+            Produit produit = pp.getProduit();
+            int reserveActuel = (produit.getStockReserve() == null ? 0 : produit.getStockReserve());
+            produit.setStockReserve(reserveActuel + pp.getQuantite());
+            produitRepository.save(produit);
+
         }
 
         commande.setTotal(total);
