@@ -23,12 +23,14 @@ public class ClientService {
 
     public Client getClientById(Long id) {
 
-        return clientRepository.findById(id).orElseThrow();
+        return clientRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("id introuvable avec cette id  :" + id));
     }
 
     public Client getClientByEmail(String email) {
 
-        return clientRepository.findByEmail(email);
+        return clientRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Client introuvable avec email: " + email));
     }
 
     public List<Client> getClientsByMail(String email) {

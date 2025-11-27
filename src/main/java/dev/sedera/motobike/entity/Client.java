@@ -22,6 +22,9 @@ public class Client {
     @Column(columnDefinition = "TEXT")
     private String adresse;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role;
+    private Role role;
+    @Column(nullable = true)
+    private String motDePasse;
 }
