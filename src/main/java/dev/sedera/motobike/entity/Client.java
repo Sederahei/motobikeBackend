@@ -25,6 +25,6 @@ public class Client {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String motDePasse;
 }
