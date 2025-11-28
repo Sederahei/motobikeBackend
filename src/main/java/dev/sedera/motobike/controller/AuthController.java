@@ -1,4 +1,4 @@
-package dev.sedera.motobike.security;
+package dev.sedera.motobike.controller;
 
 import dev.sedera.motobike.dto.LoginRequest;
 import dev.sedera.motobike.entity.Client;
