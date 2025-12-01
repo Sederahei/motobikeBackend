@@ -1,36 +1,28 @@
-    package dev.sedera.motobike.security;
+package dev.sedera.motobike.security;
 
-    import org.springframework.context.annotation.Bean;
-    import org.springframework.context.annotation.Configuration;
-    import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-    import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-    import org.springframework.security.crypto.password.PasswordEncoder;
-    import org.springframework.security.web.SecurityFilterChain;
-    import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-    import org.springframework.security.config.Customizer;
-    @Configuration
-    @EnableWebSecurity
-    public class SecurityConfig{
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
-        // ✅ Bean PasswordEncoder déclaré au niveau de la classe
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder();
-        }
+@Configuration
+public class SecurityConfig {
 
-        // ✅ Configuration de la sécurité
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-            http
-                    .csrf(csrf -> csrf.disable())
-                    .authorizeHttpRequests(auth -> auth
-                            .requestMatchers("/api/auth/**").permitAll()
-                            .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                            .requestMatchers("/api/**").authenticated()
-                            .anyRequest().permitAll()
-                    )
-                    .httpBasic(Customizer.withDefaults());
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/login**", "/user", "/api/clients/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/home", true)
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/").permitAll()
+                );
 
-            return http.build();
-        }
+        return http.build();
     }
+}
