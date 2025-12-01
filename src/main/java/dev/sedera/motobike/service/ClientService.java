@@ -1,8 +1,6 @@
 package dev.sedera.motobike.service;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import dev.sedera.motobike.entity.Client;
 import dev.sedera.motobike.repository.ClientRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +9,9 @@ import java.util.List;
 public class ClientService {
 
     private final ClientRepository clientRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public ClientService(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
+    public ClientService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Client> getAllClients() {
@@ -45,7 +41,6 @@ public class ClientService {
     }
 
     public Client saveClient(Client client) {
-        client.setMotDePasse(passwordEncoder.encode(client.getMotDePasse()));
         return clientRepository.save(client);
     }
 
